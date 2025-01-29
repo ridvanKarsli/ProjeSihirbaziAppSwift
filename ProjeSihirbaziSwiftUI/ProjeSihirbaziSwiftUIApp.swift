@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct ProjeSihirbaziSwiftUIApp: App {
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            BeforeLoginUI()
         }
     }
 }
+
+
