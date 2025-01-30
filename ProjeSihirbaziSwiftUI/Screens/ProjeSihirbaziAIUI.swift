@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProjeSihirbaziAIUI: View {
     let projectId: Int
+    let projeSihirbaziAIDataAccess = ProjeSihirbaziAIDataAccess()
     
     @State private var messageText: String = ""
     @State private var chat: [ChatMessage] = []
@@ -122,10 +123,10 @@ struct ProjeSihirbaziAIUI: View {
     }
     
     private func createNewChat() {
-        let psAi = ProjeSihirbaziAI(id: 0, userId: 0, chatHistoryJson: "", createdDateTime: "", lastDateTime: "", model: "")
+        
         
         if let token = UserDefaults.standard.string(forKey: "accessToken") {
-            psAi.createNewChat(projectId: projectId, token: token) { chat in
+            projeSihirbaziAIDataAccess.createNewChat(projectId: projectId, token: token) { chat in
                 if let chat = chat {
                     DispatchQueue.main.async {
                         self.chatId = chat.getId()
@@ -155,12 +156,11 @@ struct ProjeSihirbaziAIUI: View {
     }
 
     private func askToAI() {
-        let psAi = ProjeSihirbaziAI(id: 0, userId: 0, chatHistoryJson: "", createdDateTime: "", lastDateTime: "", model: "")
         
         if chatId == 0 {
             // Yeni sohbet oluşturulmamışsa
             if let token = UserDefaults.standard.string(forKey: "accessToken") {
-                psAi.createNewChat(projectId: projectId, token: token) { chat in
+                projeSihirbaziAIDataAccess.createNewChat(projectId: projectId, token: token) { chat in
                     if let chat = chat {
                         DispatchQueue.main.async {
                             self.chatId = chat.getId()
@@ -179,10 +179,9 @@ struct ProjeSihirbaziAIUI: View {
     }
 
     private func sendMessage(token: String) {
-        let psAi = ProjeSihirbaziAI(id: 0, userId: 0, chatHistoryJson: "", createdDateTime: "", lastDateTime: "", model: "")
-        
+
         // Mesajı gönder
-        psAi.sendMessage(chatId: chatId, message: messageText, token: token)
+        projeSihirbaziAIDataAccess.sendMessage(chatId: chatId, message: messageText, token: token)
         // Bu satır ile chat dizisini güncelle, sayfa kendiliğinden yenilenecek
         getChatWithId(token: token, id: chatId)  // Yeni mesajları al ve chat dizisini güncelle
         
@@ -205,8 +204,7 @@ struct ProjeSihirbaziAIUI: View {
 
     private func getChatWithId(token: String, id: Int) {
 
-        let projeSihirbaziAI = ProjeSihirbaziAI(id: 1, userId: 1, chatHistoryJson: "", createdDateTime: "", lastDateTime: "", model: "")
-        projeSihirbaziAI.getChatWithId(projectId: projectId, chatId: id, token: token) { chatWithId in
+        projeSihirbaziAIDataAccess.getChatWithId(projectId: projectId, chatId: id, token: token) { chatWithId in
             if let chat = chatWithId {
                 DispatchQueue.main.async {
                     self.chat = chat
@@ -217,7 +215,7 @@ struct ProjeSihirbaziAIUI: View {
     }
     
     private func getOldChats(token: String) {
-        ProjeSihirbaziAI(id: 0, userId: 0, chatHistoryJson: "", createdDateTime: "", lastDateTime: "", model: "").getOldChat(projectId: projectId, token: token) { chat in
+        projeSihirbaziAIDataAccess.getOldChat(projectId: projectId, token: token) { chat in
             if let chat = chat {
                 DispatchQueue.main.async {
                     self.chats = chat  // Eski sohbetler listesini güncelle
@@ -231,7 +229,7 @@ struct ProjeSihirbaziAIUI: View {
         let chat = chats[index]
         
         if let token = UserDefaults.standard.string(forKey: "accessToken") {
-            ProjeSihirbaziAI(id: 0, userId: 0, chatHistoryJson: "", createdDateTime: "", lastDateTime: "", model: "").deleteChat(token: token, chatId: chat.getId()) { success in
+            projeSihirbaziAIDataAccess.deleteChat(token: token, chatId: chat.getId()) { success in
                 DispatchQueue.main.async {
                     if success {
                         // Diziden kaldır

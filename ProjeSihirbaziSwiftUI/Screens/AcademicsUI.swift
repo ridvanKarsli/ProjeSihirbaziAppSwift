@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AcademicsUI: View {
-    var filtre = FiltreData()
+    let filtreDataAccess = FiltreManager()
     
     @State private var currentPage = 1
     @State private var selectedName = ""
@@ -113,11 +113,10 @@ struct AcademicsUI: View {
     }
 
     func getAcademics() {
-        // API'den akademisyenleri almak için gerekli parametreler
-        let academician = Academician(title: "", name: "", section: "", keywords: "", imageUrl: "", university: "", province: "")
+        let academicianDataAccess = AcademicianManager()
         isLoading = true
         // getAcademics fonksiyonunu çağırıyoruz
-        academician.getAcademics(currentPage: currentPage,
+        academicianDataAccess.getAcademics(currentPage: currentPage,
                                   selectedName: selectedName,
                                   selectedProvince: selectedProvince,
                                   selectedUniversity: selectedUniversity,
@@ -137,7 +136,7 @@ struct AcademicsUI: View {
     }
 
     func getIl() {
-        filtre.getIl { iller in
+        filtreDataAccess.getIl { iller in
             DispatchQueue.main.async {
                 self.iller = iller
             }
@@ -145,7 +144,7 @@ struct AcademicsUI: View {
     }
 
     func getUni() {
-        filtre.getUni { universities in
+        filtreDataAccess.getUni { universities in
             DispatchQueue.main.async {
                 self.universiteler = universities
             }
@@ -153,7 +152,7 @@ struct AcademicsUI: View {
     }
 
     func getKeyword() {
-        filtre.getKeyword { keys in
+        filtreDataAccess.getKeyword { keys in
             DispatchQueue.main.async {
                 self.anahtarKelimeler = keys
             }

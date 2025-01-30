@@ -9,7 +9,7 @@ import Foundation
 
 enum APIEndpoints: String {
     
-    private static let baseUrl = "https://projesihirbaziapi.enmdigital.com"
+    static let baseUrl = "https://projesihirbaziapi.enmdigital.com"
     
     case login = "/Auth/login"
     case updateAndData = "/Auth/me"
@@ -29,27 +29,27 @@ enum APIEndpoints: String {
     }
     
     static func getProjectURL(tur: String, page: Int, sector: String, search: String, status: String, company: String, sortOrder: String) -> String {
-        return "https://projesihirbaziapi.enmdigital.com/ScrapedProject/projects?tur=\(tur)&page=\(page)&sector=\(sector)&search=\(search)&submissionStatus=\(status)&company=\(company)&sortOrder=\(sortOrder)"
+        return "\(baseUrl)/ScrapedProject/projects?tur=\(tur)&page=\(page)&sector=\(sector)&search=\(search)&submissionStatus=\(status)&company=\(company)&sortOrder=\(sortOrder)"
     }
     
     static func getKurumURL(tur: String) ->String{
-        return "https://projesihirbaziapi.enmdigital.com/ScrapedProject/companies?tur=\(tur)"
+        return "\(baseUrl)/ScrapedProject/companies?tur=\(tur)"
     }
     
     static func deleteChatURL(chatId: Int) -> String{
-        return "https://projesihirbaziapi.enmdigital.com/ProjeSihirbaziAI/delete-chat/\(chatId)"
+        return "\(baseUrl)/ProjeSihirbaziAI/delete-chat/\(chatId)"
     }
     
     static func getOldChatURL(id : Int) -> String{
-        return "https://projesihirbaziapi.enmdigital.com/ProjeSihirbaziAI/chats/ProjeSihirbazı-\(id)"
+        return "\(baseUrl)/ProjeSihirbaziAI/chats/ProjeSihirbazı-\(id)"
     }
     
     static func createNewChatURL(id: Int) -> String{
-        return "https://projesihirbaziapi.enmdigital.com/ProjeSihirbaziAI/new-chat/ProjeSihirbazı-\(id)"
+        return "\(baseUrl)/ProjeSihirbaziAI/new-chat/ProjeSihirbazı-\(id)"
     }
     
     static func getAcademicsURL(currentPage: Int, selectedName: String, selectedProvince: String, selectedUniversity: String, selectedKeywords: String) -> String{
-        return "https://projesihirbaziapi.enmdigital.com/Academician/academicians?page=\(currentPage)&search=\(selectedName)&province=\(selectedProvince)&university=\(selectedUniversity)&keyword=\(selectedKeywords)"
+        return "\(baseUrl)/Academician/academicians?page=\(currentPage)&search=\(selectedName)&province=\(selectedProvince)&university=\(selectedUniversity)&keyword=\(selectedKeywords)"
     }
 }
   

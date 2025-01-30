@@ -1,13 +1,13 @@
 //
-//  FiltreData.swift
-//  ProjeSihirbaziApp
+//  FiltreDataAccess.swift
+//  ProjeSihirbaziSwiftUI
 //
-//  Created by Rıdvan Karslı on 31.12.2024.
+//  Created by Rıdvan Karslı on 30.01.2025.
 //
 
 import Foundation
 
-class FiltreData{
+class FiltreDataAccess: FiltreInterface{
     
     func getKurumlar(tur: String, completion: @escaping ([String]) -> Void) {
         let urlString = APIEndpoints.getKurumURL(tur: tur)
@@ -155,6 +155,5 @@ class FiltreData{
            task.resume()
        }
    
-    
-}
 
+}

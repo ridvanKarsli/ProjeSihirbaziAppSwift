@@ -81,9 +81,9 @@ struct MainMenuUI: View {
     }
 
     func getDashboardData() {
-        let dashboard = Dashboard(grantCount: 0, academicianCount: 0, tenderCount: 0)
+        let dashboardDataAccess = DashboardManager()
         
-        dashboard.getDashboardData { fetchedDashboard in
+        dashboardDataAccess.getDashboardData { fetchedDashboard in
             DispatchQueue.main.async {
                 if let dashboard = fetchedDashboard {
                     self.grantCount = dashboard.getGrantCount()
@@ -97,8 +97,6 @@ struct MainMenuUI: View {
         }
     }
     
-
-
 }
 
 struct DashboardView_Previews: PreviewProvider {

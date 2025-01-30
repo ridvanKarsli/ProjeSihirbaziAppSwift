@@ -1,7 +1,7 @@
 import SwiftUI
 struct ProjectsUI: View {
 
-    var filtre = FiltreData()
+    var filtreDataAccess = FiltreManager()
     let projectsType: String
     
     @State private var projectsArr: [Projects] = []
@@ -133,6 +133,7 @@ struct ProjectsUI: View {
     }
 
     func getProject() {
+        let projectDataAccess = ProjectManager()
         // Seçilen durum ve sıralamaya karşılık gelen API değerlerini al
         let durumIndex = basvuruDurumlari.firstIndex(of: selectedDurum)
         let siralamaIndex = siralamalar.firstIndex(of: selectedSiralama)
@@ -140,24 +141,13 @@ struct ProjectsUI: View {
         let durumAPIValue = durumIndex != nil ? basvuruDurumlariAPI[durumIndex!] : ""
         let siralamaAPIValue = siralamaIndex != nil ? siralamalarAPI[siralamaIndex!] : ""
         
-        // Proje nesnesi oluştur
-        let project = Projects(
-            id: 0,
-            ad: "",
-            resim: "",
-            kurum: "",
-            basvuruDurumu: "",
-            basvuruLinki: "",
-            sektorler: "",
-            eklenmeTarihi: "",
-            tur: ""
-        )
+        
         
         // Yükleniyor durumu
         isLoading = true
         
         // API isteği
-        project.getProject(
+        projectDataAccess.getProject(
             tur: projectsType,
             page: currentPage,
             sector: selectedSektor,
@@ -183,7 +173,7 @@ struct ProjectsUI: View {
 
 
     func getKurumlar(tur: String) {
-        filtre.getKurumlar(tur: tur) { kurumlar in
+        filtreDataAccess.getKurumlar(tur: tur) { kurumlar in
             DispatchQueue.main.async {
                 self.kurumlar = kurumlar
             }
@@ -191,7 +181,7 @@ struct ProjectsUI: View {
     }
 
     func getSektorler() {
-        filtre.getSektorler { sektorler in
+        filtreDataAccess.getSektorler { sektorler in
             DispatchQueue.main.async {
                 self.sektorler = sektorler
             }
@@ -211,7 +201,8 @@ struct ProjectsUI: View {
     }
     
     func performTokenRefresh() {
-        User(id: 0, name: "", surname: "", email: "", phone: "", imageFile: "", role: "").refreshToken { success in
+        let userDataAccess = UserDataAccess()
+        userDataAccess.refreshToken { success in
             if success {
                 print("Token başarıyla yenilendi.")
                 

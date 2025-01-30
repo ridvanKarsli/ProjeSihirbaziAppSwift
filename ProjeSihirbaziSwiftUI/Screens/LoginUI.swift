@@ -141,7 +141,8 @@ struct LoginUI: View {
     }
 
     func forgetPassword(completion: @escaping (String) -> Void) {
-        User(id: 0, name: "", surname: "", email: "", phone: "", imageFile: "", role: "").forgetPassword(email: forgotPasswordEmail) { message in
+        let userDataAccess = UserManager()
+        userDataAccess.forgetPassword(email: forgotPasswordEmail) { message in
             // İşlem sonucunu completion handler üzerinden döndür
             completion(message)
         }
@@ -149,16 +150,10 @@ struct LoginUI: View {
    
 
     func login() {
-        guard !email.isEmpty, !password.isEmpty else {
-            showAlert(message: "Lütfen e-posta ve şifrenizi girin.")
-            return
-        }
+        let userDataAccess = UserManager();
 
-        isLoading = true // Yükleniyor başladığında true yapıyoruz
-
-        let user = User(id: 0, name: "", surname: "", email: email, phone: "", imageFile: "", role: "")
-        
-        user.logIn(email: email, password: password) { success in
+        isLoading = true
+        userDataAccess.logIn(email: email, password: password) { success in
             DispatchQueue.main.async {
                 isLoading = false // Yükleniyor bittiğinde false yapıyoruz
                 if success {

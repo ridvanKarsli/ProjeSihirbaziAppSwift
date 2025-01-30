@@ -120,9 +120,9 @@ struct ProfileUI: View {
 
     // Kullanıcı verilerini çekme
     func getUserData(token: String) {
-        let user = User(id: 0, name: "", surname: "", email: "", phone: "", imageFile: "", role: "")
+        let userDataAccess = UserManager()
         
-        user.getUserData(token: token) { fetchedUser in
+        userDataAccess.getUserData(token: token) { fetchedUser in
             DispatchQueue.main.async {
                 if let fetchedUser = fetchedUser {
                     self.name = fetchedUser.getName()
@@ -143,16 +143,12 @@ struct ProfileUI: View {
     
     // Kullanıcı verilerini güncelleme
     func updateUserData() {
-        if name.isEmpty || surname.isEmpty {
-            alertMessage = "Lütfen tüm alanları doldurun."
-            showAlert = true
-            return
-        }
+        let userDataAccess = UserManager()
         
         if let token = UserDefaults.standard.string(forKey: "accessToken") {
-            let user = User(id: 0, name: name, surname: surname, email: email, phone: phone, imageFile: "", role: "")
             
-            user.updateUserData(token: token, name: name, surname: surname, imageFile: "", password: newPassword) { updatedUser in
+            
+            userDataAccess.updateUserData(token: token, name: name, surname: surname, imageFile: "", password: newPassword) { updatedUser in
                 DispatchQueue.main.async {
                     if let updatedUser = updatedUser {
                         self.name = updatedUser.getName()
@@ -190,7 +186,9 @@ struct ProfileUI: View {
     }
     
     func performTokenRefresh() {
-        User(id: 0, name: "", surname: "", email: "", phone: "", imageFile: "", role: "").refreshToken { success in
+        let userDataAccess = UserManager()
+        
+            userDataAccess.refreshToken { success in
             if success {
                 print("Token başarıyla yenilendi.")
             } else {
